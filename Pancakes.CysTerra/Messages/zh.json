@@ -1,0 +1,33 @@
+{
+	"Culture": "zh-CN",
+	"Strings": {
+		"$ExtensionDesc": "用于接收及处理 PancakesAPI 来源的信息的核心组件。",
+		"$ExtensionName": "PancakesAPI 事件源组件",
+		"AuthorityName": "GlobalQuake",
+		"ComponentName": "PancakesAPI（GlobalQuake）",
+		"PropertyDepth": "深度",
+		"PropertyDepthValue": "{0}km",
+		"PropertyMaxIntensity": "最大烈度",
+		"PropertyMagnitude": "M",
+		"PropertyQuality": "质量",
+		"PropertySerial": "报数",
+		"SourceName": "PancakesAPI",
+		"Title": "检出",
+		"TitleArchived": "归档",
+		"TitleCanceled": "取消"
+	},
+	"StringSets": {
+		"PropertyQualityValue": {
+			"Strings": {
+				"S": "S",
+				"A": "A",
+				"B": "B",
+				"C": "C",
+				"D": "D",
+				"E": "E",
+				"F": "F",
+				"?": "?"
+			}
+		}
+	}
+}

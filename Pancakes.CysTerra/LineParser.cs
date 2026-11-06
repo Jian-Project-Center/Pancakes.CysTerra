@@ -28,6 +28,9 @@ namespace Pancakes.CysTerra {
 			else if (root.TryGetProperty("Data", out var legacy) && legacy.ValueKind == JsonValueKind.Object) {
 				data = legacy;
 			}
+			else if (root.TryGetProperty("data", out var camel) && camel.ValueKind == JsonValueKind.Object) {
+				data = camel;
+			}
 			else {
 				data = root;
 			}
@@ -59,13 +62,14 @@ namespace Pancakes.CysTerra {
 				?? origin;
 			var intensity = Intensity(data);
 			var intensityMmi = MmiIntensity.TryParse(intensity);
+			ParseQuality(data, out var qualityLevel, out var errDepth);
 
 			if (!cancel && (mag == null || lat == null || lon == null || depth == null || origin == null)) {
 				return null;
 			}
 
 			var fp = string.Join("|", id, serial, cancel, final, Fmt(mag), Fmt(depth), Fmt(lat), Fmt(lon), place, intensity,
-				lastUpdated?.Ticks);
+				qualityLevel, lastUpdated?.Ticks);
 			return new LineEvent {
 				Agency = "gq",
 				UnitId = id,
@@ -81,9 +85,82 @@ namespace Pancakes.CysTerra {
 				LastUpdatedUtc = lastUpdated,
 				Intensity = intensity,
 				IntensityMmi = intensityMmi,
+				QualityLevel = qualityLevel,
+				QualityErrDepth = errDepth,
 				Fingerprint = fp,
 			};
 		}
+
+		/// <summary>对齐官方：显式 qualityLevel/qualityID，或由误差字段推等级。</summary>
+		static void ParseQuality(JsonElement data, out int? level, out float? errDepth) {
+			level = null;
+			errDepth = null;
+			JsonElement q = default;
+			var hasQ = data.TryGetProperty("quality", out q) && q.ValueKind == JsonValueKind.Object;
+			if (!hasQ) {
+				level = LevelOrNull(data, "qualityLevel", "qualityID", "qualityId");
+				return;
+			}
+
+			level = LevelOrNull(q, "qualityLevel", "qualityID", "qualityId");
+			errDepth = AsFloat(Num(q, "errDepth"));
+			if (level != null) {
+				return;
+			}
+
+			var errEW = AsFloat(Num(q, "errEW")) ?? 0f;
+			var errNS = AsFloat(Num(q, "errNS")) ?? 0f;
+			var errOrigin = AsFloat(Num(q, "errOrigin")) ?? 0f;
+			var pct = AsFloat(Num(q, "pct")) ?? 0f;
+			var stations = (int)(Num(q, "stations") ?? 0);
+			var ed = errDepth ?? 0f;
+			level = ComputeQualityLevel(ed, errEW, errNS, errOrigin, pct, stations);
+		}
+
+		static int ComputeQualityLevel(
+			float errDepth, float errEW, float errNS, float errOrigin, float pct, int stations) {
+			int d = errDepth < 8f ? 0 : errDepth < 20f ? 1 : errDepth < 40f ? 2 : errDepth < 100f ? 3 : 4;
+			int ew = errEW < 5f ? 0 : errEW < 12f ? 1 : errEW < 24f ? 2 : errEW < 60f ? 3 : 4;
+			int ns = errNS < 5f ? 0 : errNS < 12f ? 1 : errNS < 24f ? 2 : errNS < 60f ? 3 : 4;
+			int o = errOrigin < 1.2f ? 0 : errOrigin < 3f ? 1 : errOrigin < 9f ? 2 : errOrigin < 20f ? 3 : 4;
+			int p = pct >= 90f ? 0 : pct >= 80f ? 1 : pct >= 65f ? 2 : pct >= 55f ? 3 : 4;
+			int s = stations >= 12 ? 0 : stations >= 10 ? 1 : stations >= 8 ? 2 : stations >= 6 ? 3 : 4;
+			return Math.Max(d, Math.Max(ew, Math.Max(ns, Math.Max(o, Math.Max(p, s)))));
+		}
+
+		static int? LevelOrNull(JsonElement o, params string[] keys) {
+			foreach (var k in keys) {
+				if (!o.TryGetProperty(k, out var v)) {
+					continue;
+				}
+				if (v.ValueKind == JsonValueKind.Number && v.TryGetInt32(out var i) && i >= 0 && i <= 6) {
+					return i;
+				}
+				if (v.ValueKind == JsonValueKind.String) {
+					var s = v.GetString()?.Trim();
+					if (string.IsNullOrEmpty(s)) {
+						continue;
+					}
+					if (int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var n)
+						&& n >= 0 && n <= 6) {
+						return n;
+					}
+					return s.ToUpperInvariant() switch {
+						"S" => 0,
+						"A" => 1,
+						"B" => 2,
+						"C" => 3,
+						"D" => 4,
+						"E" => 5,
+						"F" => 6,
+						_ => null,
+					};
+				}
+			}
+			return null;
+		}
+
+		static float? AsFloat(double? n) => n is double d ? (float)d : null;
 
 		static string? Text(JsonElement o, params string[] keys) {
 			foreach (var k in keys) {

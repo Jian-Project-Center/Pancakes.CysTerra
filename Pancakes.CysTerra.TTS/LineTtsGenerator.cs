@@ -32,7 +32,7 @@ namespace Pancakes.CysTerra.TTS {
 			}
 
 			var priority = e.IsCancel ? -50 : -100;
-			// 重复标题用中文「地震情报」，避免 TTS 朗读英文 PancakesAPI / GlobalQuake
+			// 标题键对齐官方 GlobalQuake：检出/归档/取消；TtsLead 空
 			var repeatTitle = res.GetStringRequired("TtsRepeatTitle");
 			return new TTSEntry(culture, repeatTitle, spoken.ToString(), priority, SoundFor(e));
 		}
@@ -84,10 +84,10 @@ namespace Pancakes.CysTerra.TTS {
 
 		static string TitleKey(LineEvent e) {
 			if (e.IsCancel) {
-				return "TitleCancel";
+				return "TitleCanceled";
 			}
 			if (e.IsFinal) {
-				return "TitleFinal";
+				return "TitleArchived";
 			}
 			// 官方进行中一律 Title，无「更新」标题
 			return "Title";

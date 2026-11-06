@@ -9,7 +9,7 @@ using Cryville.EEW;
 
 namespace Pancakes.CysTerra.Features {
 	/// <summary>
-	/// 对齐官方 GlobalQuakeReportFeatureGenerator（不写 Name；Ongoing=!归档）。
+	/// 对齐官方 GlobalQuakeReportFeatureGenerator（不写 Name；Ongoing=!归档；质量误差写深度不确定度）。
 	/// </summary>
 	public sealed class LineFeatureGenerator : IGenerator<LineEvent, Feature?> {
 		static readonly Unit Kilometre = Units.Metre.WithPrefix(MetricPrefixes.Kilo);
@@ -36,7 +36,12 @@ namespace Pancakes.CysTerra.Features {
 			if (e.Latitude is double lat && e.Longitude is double lon) {
 				var at = new Feature(new Point(lon, lat)) { { Is, Hypocenter } };
 				if (e.DepthKm is double depth) {
-					at[HypocenterDepth] = new Quantity(depth, Kilometre);
+					if (e.QualityErrDepth is float err) {
+						at[HypocenterDepth] = new QuantityUnc((float)depth, err, Kilometre);
+					}
+					else {
+						at[HypocenterDepth] = new Quantity(depth, Kilometre);
+					}
 				}
 				feature[At] = at;
 			}

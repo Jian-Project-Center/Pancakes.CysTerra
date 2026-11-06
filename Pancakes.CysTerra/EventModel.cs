@@ -24,6 +24,10 @@ namespace Pancakes.CysTerra {
 		public string? Intensity { get; init; }
 		/// <summary>IntensityMMI 数值 1–12。</summary>
 		public float? IntensityMmi { get; init; }
+		/// <summary>质量等级 0=S … 6=F；对齐官方 QualityLevel。</summary>
+		public int? QualityLevel { get; init; }
+		/// <summary>深度误差 km（有则 Features 可写不确定度）。</summary>
+		public float? QualityErrDepth { get; init; }
 		public string Fingerprint { get; init; } = "";
 	}
 }

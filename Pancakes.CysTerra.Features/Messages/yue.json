@@ -1,0 +1,8 @@
+{
+	"Culture": "yue",
+	"Strings": {
+		"$ExtensionDesc": "用嚟產生 PancakesAPI 事件詳情嘅組件。",
+		"$ExtensionName": "PancakesAPI 事件詳情組件",
+		"ComponentName": "PancakesAPI（GlobalQuake）"
+	}
+}

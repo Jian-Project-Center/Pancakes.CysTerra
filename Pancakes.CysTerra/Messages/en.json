@@ -9,11 +9,25 @@
 		"PropertyDepthValue": "{0}km",
 		"PropertyMaxIntensity": "Max intensity",
 		"PropertyMagnitude": "M",
+		"PropertyQuality": "Quality",
 		"PropertySerial": "Serial",
 		"SourceName": "PancakesAPI",
-		"Title": "Earthquake early warning",
-		"TitleCancel": "Cancellation",
-		"TitleUpdate": "Earthquake early warning update",
-		"TitleFinal": "Final report"
+		"Title": "Detected",
+		"TitleArchived": "Archived",
+		"TitleCanceled": "Canceled"
+	},
+	"StringSets": {
+		"PropertyQualityValue": {
+			"Strings": {
+				"S": "S",
+				"A": "A",
+				"B": "B",
+				"C": "C",
+				"D": "D",
+				"E": "E",
+				"F": "F",
+				"?": "?"
+			}
+		}
 	}
 }

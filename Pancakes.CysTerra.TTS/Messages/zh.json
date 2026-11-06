@@ -1,0 +1,17 @@
+{
+	"Culture": "zh-CN",
+	"Strings": {
+		"$ExtensionDesc": "用于生成 PancakesAPI 语音消息的组件。",
+		"$ExtensionName": "PancakesAPI TTS 组件",
+		"ComponentName": "PancakesAPI（GlobalQuake）",
+		"Title": "检出",
+		"TitleArchived": "归档",
+		"TitleCanceled": "取消",
+		"TtsDepth": "，深度{0}千米",
+		"TtsIntensity": "，最大烈度{0}",
+		"TtsLead": "",
+		"TtsMagnitude": "，震级{0}",
+		"TtsPlace": "，{0}",
+		"TtsRepeatTitle": "地震情报"
+	}
+}

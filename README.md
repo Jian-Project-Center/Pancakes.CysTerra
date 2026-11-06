@@ -6,13 +6,13 @@
 
 ## 安装
 
-扩展仅适用于 CysTerra **通用版**（Android 版不支持扩展）。以下三个包均需安装，版本 **0.4.7.2**：
+扩展仅适用于 CysTerra **通用版**（Android 版不支持扩展）。以下三个包均需安装，版本 **0.4.7.3**：
 
 | 组件 | 导入包 |
 | --- | --- |
-| 事件源 + 事件摘要 | `Pancakes.CysTerra-0.4.7.2.zip` |
-| 事件详情 | `Pancakes.CysTerra.Features-0.4.7.2.zip` |
-| 语音消息 | `Pancakes.CysTerra.TTS-0.4.7.2.zip` |
+| 事件源 + 事件摘要 | `Pancakes.CysTerra-0.4.7.3.zip` |
+| 事件详情 | `Pancakes.CysTerra.Features-0.4.7.3.zip` |
+| 语音消息 | `Pancakes.CysTerra.TTS-0.4.7.3.zip` |
 
 每个 zip 的主 dll 位于根目录，可直接导入。发布附件见本仓库 [Releases](https://github.com/Jian11323/Pancakes.CysTerra/releases)。
 
@@ -30,10 +30,11 @@
 | 预警条 Source | `GlobalQuake` |
 | 事件摘要 / 事件详情 / 语音消息 | `PancakesAPI（GlobalQuake）` |
 | 事件源等其余文案 | `PancakesAPI` |
+| 标题 / 语音 | 对齐官方：`检出` / `归档` / `取消`（`Detected` / `Archived` / `Canceled`） |
 
 ## 行为说明
 
-- 字段语义对齐官方 GlobalQuake 报告（震级、深度、坐标、修订、归档等）；上游没有的字段不会补写。
+- 字段语义对齐官方 GlobalQuake 报告（震级、深度、坐标、修订、归档、质量 S–F 等）；上游没有的字段不会补写。
 - MMI：上游罗马数字经官方 `RomanNumerals.RomanToInteger` 转为数值后再写入 Severity；展示用 `CreateRomanIntensityProperty`。
 - 终报（归档）后事件会按官方超时表从进行中状态退出。
 - 地名解析使用与官方一致的 NameLocation 策略。

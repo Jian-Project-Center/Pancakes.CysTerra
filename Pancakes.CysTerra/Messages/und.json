@@ -9,11 +9,25 @@
 		"PropertyDepthValue": "{0}km",
 		"PropertyMaxIntensity": "最大烈度",
 		"PropertyMagnitude": "M",
+		"PropertyQuality": "质量",
 		"PropertySerial": "报数",
 		"SourceName": "PancakesAPI",
-		"Title": "地震预警",
-		"TitleCancel": "取消报",
-		"TitleUpdate": "地震预警更新",
-		"TitleFinal": "最终报"
+		"Title": "检出",
+		"TitleArchived": "归档",
+		"TitleCanceled": "取消"
+	},
+	"StringSets": {
+		"PropertyQualityValue": {
+			"Strings": {
+				"S": "S",
+				"A": "A",
+				"B": "B",
+				"C": "C",
+				"D": "D",
+				"E": "E",
+				"F": "F",
+				"?": "?"
+			}
+		}
 	}
 }

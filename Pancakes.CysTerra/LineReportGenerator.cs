@@ -23,6 +23,8 @@ namespace Pancakes.CysTerra {
 			40, 40, // M7+
 		];
 
+		static readonly TagTypeKey TagQualityGlobalQuake = "Quality:GlobalQuake";
+
 		public ReportModel Generate(LineEvent e, IReportGeneratorContext? context, ref CultureInfo culture) {
 			ThrowHelper.ThrowIfNull(e);
 			context ??= EmptyReportGeneratorContext.Instance;
@@ -38,7 +40,7 @@ namespace Pancakes.CysTerra {
 
 			// 官方：revisionID==-1 只出取消标题后返回
 			if (e.IsCancel) {
-				result.Title = res.GetStringRequired("TitleCancel");
+				result.Title = res.GetStringRequired("TitleCanceled");
 				return result;
 			}
 
@@ -70,7 +72,7 @@ namespace Pancakes.CysTerra {
 			result.UtcIssueTime = e.LastUpdatedUtc ?? DateTime.UtcNow;
 
 			if (e.IsFinal) {
-				result.Title = res.GetStringRequired("TitleFinal");
+				result.Title = res.GetStringRequired("TitleArchived");
 				// 官方归档报不设 InvalidatedTime
 			}
 			else {
@@ -99,6 +101,24 @@ namespace Pancakes.CysTerra {
 					HypocenterDepth, res.GetStringRequired("PropertyDepth"),
 					string.Format(culture, res.GetStringRequired("PropertyDepthValue"), d.ToString("F1", culture)),
 					context.SeverityScheme, d) { AccuracyOrder = 30 });
+			}
+			if (e.QualityLevel is int qLevel) {
+				var text = qLevel switch {
+					0 => "S",
+					1 => "A",
+					2 => "B",
+					3 => "C",
+					4 => "D",
+					5 => "E",
+					6 => "F",
+					_ => "?",
+				};
+				var qset = res.GetStringSetRequired("PropertyQualityValue");
+				result.Properties.Add(new ReportProperty(
+					TagQualityGlobalQuake, res.GetStringRequired("PropertyQuality"),
+					qset.GetStringOrDefault(text, ""), context.SeverityScheme, text) {
+					AccuracyOrder = 30,
+				});
 			}
 			return result;
 		}
