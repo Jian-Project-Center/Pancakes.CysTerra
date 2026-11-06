@@ -14,7 +14,7 @@
 | 事件详情 | `Pancakes.CysTerra.Features-0.4.7.3.zip` |
 | 语音消息 | `Pancakes.CysTerra.TTS-0.4.7.3.zip` |
 
-每个 zip 的主 dll 位于根目录，可直接导入。发布附件见本仓库 [Releases](https://github.com/Jian11323/Pancakes.CysTerra/releases)。
+每个 zip 的主 dll 位于根目录，可直接导入。发布附件见本仓库 [Releases](https://github.com/Jian-Project-Center/Pancakes.CysTerra/releases)。
 
 ## 配置
 
@@ -43,6 +43,8 @@
 
 ## 许可证
 
-版权所有 © 2026 纪安。
+版权所有 © 2026 纪安 / Jian Project Center。
+
+联系邮箱：jianproject@163.com
 
 本程序以 **GNU LGPL-3.0-or-later** 授权。LGPL 正文见 `LICENSE.txt`，其所引用的 GPL-3.0 正文见 `COPYING.txt`。对应源代码即本仓库；发布的扩展包内同时附带这两份许可证。
